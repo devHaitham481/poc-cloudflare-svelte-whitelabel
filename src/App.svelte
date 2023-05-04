@@ -1,20 +1,26 @@
 <script>
-  export let name;
 
   import { onmount } from "svelte";
-  let brandconfig = {};
+  let customizations = {};
 
   onmount(async () => {
-    const branddomain = window.location.hostname;
-    const response = await fetch(
-      `http://localhost:4000/api/customizations/${domain}`
-    );
+    const domain = window.location.hostname;
+    const workerUrl = `https://${process.env.CF_ACCOUNT_ID}.${process.env.CF_WORKERS_SUBDOMAIN}.workers.dev`;
 
-    brandconfig = await response.json();
+
+    fetch(`${workerUrl}/`, {
+      headers: { Host: domain },
+    })
+      .then(response => response.json())
+      .then(data => {
+        customizations = data;
+      })
+      .catch(err => console.error(err));
+  }
   });
 </script>
 
-<div style="background-color: {brandconfig.primarycolor}">
+<div>
   <img src={brandconfig.logo} alt="brand logo" />
   <ul>
     {#each brandconfig.menuitems as menuitem}
@@ -44,4 +50,3 @@
     }
   }
 </style>
-

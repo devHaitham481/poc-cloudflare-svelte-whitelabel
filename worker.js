@@ -1,14 +1,16 @@
-const Redis = require('ioredis');
+import { config } from 'config.ts'
+// const Redis = require('ioredis');
 
 async function handleRequest(request) {
   const domain = new URL(request.url).hostname;
 
-  const client = new Redis(process.env.REDIS_URL);
+  // const client = new Redis(process.env.REDIS_URL);
 
-  const customizations = await client.get(getBrandFromDomain(domain));
-  client.quit();
+  // const customizations = await client.get(getBrandFromDomain(domain));
+  // client.quit();
 
-  return new Response(customizations, {
+
+  return new Response(config, {
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
@@ -20,14 +22,14 @@ async function handleRequest(request) {
 
 
 
-function getBrandFromDomain(domain) {
-  const brandMap = {
-    'brandA.com': 'brandA',
-    'brandB.com': 'brandB'
-  };
-
-  return brandMap[domain];
-}
+// function getBrandFromDomain(domain) {
+//   const brandMap = {
+//     'brandA.com': 'brandA',
+//     'brandB.com': 'brandB'
+//   };
+//
+//   return brandMap[domain];
+// }
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
