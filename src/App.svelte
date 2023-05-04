@@ -1,33 +1,31 @@
 <script>
-
-  import { onmount } from "svelte";
+  import { onMount } from "svelte";
   let customizations = {};
 
-  onmount(async () => {
+  onMount(async () => {
     const domain = window.location.hostname;
     const workerUrl = `https://${process.env.CF_ACCOUNT_ID}.${process.env.CF_WORKERS_SUBDOMAIN}.workers.dev`;
-
 
     fetch(`${workerUrl}/`, {
       headers: { Host: domain },
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         customizations = data;
       })
-      .catch(err => console.error(err));
-  }
+      .catch((err) => console.error(err));
   });
 </script>
 
-<div>
+<main>
   <img src={brandconfig.logo} alt="brand logo" />
   <ul>
     {#each brandconfig.menuitems as menuitem}
       <li><a href={menuitem.link}>{menuitem.label}</a></li>
     {/each}
   </ul>
-</div>
+  <p>Hello World!</p>
+</main>
 
 <style>
   main {
